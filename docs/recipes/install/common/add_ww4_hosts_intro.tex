@@ -4,8 +4,8 @@
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # add the nodes with --discoverable so warewulf will identify new mac addresses
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-  wwctl node add --discoverable=yes --container=BOSVER \
-    --ipaddr=${c_ip[$i]} --netmask=${internal_netmask} ${compute_prefix}$i
+wwctl node add --discoverable=yes --container=rocky9.4 \
+	  --ipaddr=${c_ip[$i]} --netmask=${internal_netmask} ${compute_prefix}$i
 done
 \end{lstlisting}
 % end_ohpc_run

@@ -22,9 +22,9 @@ rebuilding, this is also true for any final command that fails.
 [sms](*\#*) wwctl container import docker://ghcr.io/warewulf/warewulf-rockylinux:BOSTAG BOSVER --syncuser
 
 # Enable OpenHPC inside image and update container
-[sms](*\#*) (*\containerinstall*)
-  (*\install*) http://repos.openhpc.community/OpenHPC/3/EL_9/x86_64/ohpc-release-3-1.el9.x86_64.rpm
-  (*\pkgmgr*) -y update
+[sms](*\#*) wwctl container exec rocky-9.4 /bin/bash <<- EOF
+  dnf -y install http://repos.openhpc.community/OpenHPC/3/EL_9/x86_64/ohpc-release-3-1.el9.x86_64.rpm
+  dnf -y update
   /bin/false
 EOF
 

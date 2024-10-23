@@ -10,8 +10,8 @@ common base packages:
 % ohpc_comment_header Add OpenHPC base components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
 # Install compute node base meta-package
-[sms](*\#*) (*\containerinstall*)
-  (*\install*) ohpc-base-compute
+[sms](*\#*) wwctl container exec rocky-9.4 /bin/bash <<- EOF
+  dnf -y install ohpc-base-compute
   /bin/false
 EOF
 \end{lstlisting}

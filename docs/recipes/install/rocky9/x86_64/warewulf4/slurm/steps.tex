@@ -28,7 +28,6 @@
 \newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{dnf -y install}
 \newcommand{\chrootinstall}{dnf -y --installroot=\$CHROOT install}
-\newcommand{\containerinstall}{wwctl container exec \baseos{} /bin/bash <<EOF}
 \newcommand{\groupinstall}{dnf -y groupinstall}
 \newcommand{\groupchrootinstall}{dnf -y --installroot=\$CHROOT groupinstall}
 \newcommand{\remove}{dnf -y remove}
@@ -136,17 +135,17 @@
 % begin_ohpc_run
 % ohpc_validation_comment Add SLURM and other components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
-[sms](*\#*) (*\containerinstall*) 
+[sms](*\#*) wwctl container exec rocky-9.4 /bin/bash <<- EOF 
   # Add Slurm client support meta-package and enable munge and slurmd
-  (*\install*) ohpc-slurm-client
+  dnf -y install ohpc-slurm-client
   systemctl enable munge
   systemctl enable slurmd
 
   # Add Network Time Protocol (NTP) support
-  (*\install*) chrony
+  dnf -y intall chrony
 
   # Include modules user environment
-  (*\install*) lmod-ohpc
+  dnf -y intall lmod-ohpc
 
   # defer image rebuild
   /bin/false
@@ -224,7 +223,7 @@ EOF
 \input{common/import_ww4_files}
 %\vspace*{0.3cm}
 \input{common/import_ww4_files_slurm}
-\input{common/import_ww_files_ib_centos}
+\input{common/import_ww4_files_ib_centos}
 %\vspace*{0.3cm}
 \input{common/finalize_warewulf4_provisioning}
 %\vspace*{0.2cm}
@@ -277,7 +276,7 @@ EOF
 \input{common/post_boot}
 
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/slurm_test_job}
+\input{common/warewulf4_slurm_test_job}
 
 \clearpage
 \appendix

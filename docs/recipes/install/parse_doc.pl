@@ -36,6 +36,7 @@ chdir $inputDir;
 
 # Determine BaseOS, arch, and define package manager commands
 my $BaseOS             = "";
+my $BaseOSTag          = "";
 my $BaseOSshort        = "";
 my $OSimage            = "";
 my $arch               = "";
@@ -81,6 +82,8 @@ while( my $line = <IN> ) {
         $groupChrootInstall = $1;
     } elsif( $line =~ /\\newcommand\{\\baseos\}\{(.+)\}/ ) {
         $BaseOS = $1;
+    } elsif( $line =~ /\\newcommand\{\\baseostag\}\{(.+)\}/ ) {
+        $BaseOSTag = $1;
     } elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
         $BaseOSshort = $1;
     } elsif( $line =~ /\\newcommand\{\\osimage\}\{(.+)\}/ ) {
@@ -105,6 +108,7 @@ $groupChrootInstall =~ s/\\\$/\$/;
 # print "groupInstall        = $groupInstall\n";
 # print "groupChrootInstall  = $groupChrootInstall\n";
 # print "BaseOS              = $BaseOS\n";
+# print "BaseOSTa            = $BaseOSTag\n";
 # print "VERLONG             = $verlong\n";
 # print "OSTree              = $OSTree\n";
 # print "IMAGE               = $image\n";
@@ -169,20 +173,22 @@ while( <IN> ) {
         # <<- indicates the HERE document will ignore leadings tabs (not spaces)
         } elsif( $_ =~ /$prompt (.+ <<-[ ]*([^ ]+).*)$/ ) {
             my $cmd  = update_cmd($1);
+            chomp $cmd;
             my $here = $2;
+            chomp $here;
 
             # commands that begin with a % are for CI only
             next if( $_ =~ /^%/ && !$ci_run );
 
             print $fh ' ' x $indent . "$cmd\n";
             my $next_line;
-        do {
-            $next_line = <IN>;
-            # trim leading and trailing space
-            $next_line =~ s/^\s+|\s+$//g;
+            do {
+                $next_line = <IN>;
+                # trim leading and trailing space
+                $next_line =~ s/^\s+|\s+$//g;
 
-            print $fh "$next_line\n";
-        } while( $next_line !~ /^$here/ );
+                print $fh "$next_line\n";
+            } while( $next_line !~ /^$here/ );
 
         # handle commands line line continuation: prompt$ command \
         } elsif( $_ =~ /$prompt (.+) \\$/ ) {
